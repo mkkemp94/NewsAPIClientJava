@@ -1,6 +1,25 @@
 package com.mkemp.newsapiclientjava.domain.repository;
 
-public class NewsRepository
+import com.mkemp.newsapiclientjava.data.model.APIResponse;
+import com.mkemp.newsapiclientjava.data.model.Article;
+import com.mkemp.newsapiclientjava.data.util.Resource;
+
+import java.util.List;
+
+public interface NewsRepository
 {
-    // TODO : Define functions once we recognize the model classes
+    Resource<APIResponse> getNewsHeadlines();
+
+    Resource<APIResponse> getSearchedNews(final String searchQuery);
+
+    void saveNews(final Article article);
+
+    void deleteNews(final Article article);
+
+    interface SavedNewsHolder
+    {
+        void gotSavedNews(final List<Article> news);
+    }
+
+    void getSavedNews(final Article article, final SavedNewsHolder savedNewsHolder);
 }
