@@ -6,5 +6,5 @@ import retrofit2.Response;
 
 public interface NewsRemoteDataSource
 {
-    Response<APIResponse> getTopHeadlines();
+    Response<APIResponse> getTopHeadlines(final String country, final int page);
 }

@@ -10,20 +10,15 @@ import retrofit2.Response;
 public class NewsRemoteDataSourceImpl implements NewsRemoteDataSource
 {
     private final NewsAPIService newsAPIService;
-    private final String country;
-    private final String page;
 
-    public NewsRemoteDataSourceImpl(final NewsAPIService newsAPIService,
-                                    final String country,
-                                    final String page)
+    public NewsRemoteDataSourceImpl(final NewsAPIService newsAPIService)
     {
         this.newsAPIService = newsAPIService;
-        this.country = country;
-        this.page = page;
     }
 
     @Override
-    public Response<APIResponse> getTopHeadlines()
+    public Response<APIResponse> getTopHeadlines(final String country,
+                                                 final int page)
     {
         return newsAPIService.getTopHeadlines(country, page, BuildConfig.API_KEY);
     }

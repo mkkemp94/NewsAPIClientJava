@@ -10,6 +10,6 @@ public interface NewsAPIService
 {
     @GET("v2/top-headlines")
     Response<APIResponse> getTopHeadlines(@Query("country") final String country,
-                                          @Query("page") final String page,
+                                          @Query("page") final int page,
                                           @Query("apiKey") final String apiKey);
 }

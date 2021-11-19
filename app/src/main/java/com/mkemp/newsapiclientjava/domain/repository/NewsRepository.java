@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface NewsRepository
 {
-    Resource<APIResponse> getNewsHeadlines();
+    Resource<APIResponse> getNewsHeadlines(final String country,
+                                           final int page);
 
     Resource<APIResponse> getSearchedNews(final String searchQuery);
 

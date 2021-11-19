@@ -13,9 +13,10 @@ public class GetNewsHeadlinesUseCase
         this.newsRepository = newsRepository;
     }
 
-    public Resource<APIResponse> execute()
+    public Resource<APIResponse> execute(final String country,
+                                         final int page)
     {
         // Can modify this or perform other logic here
-        return newsRepository.getNewsHeadlines();
+        return newsRepository.getNewsHeadlines(country, page);
     }
 }

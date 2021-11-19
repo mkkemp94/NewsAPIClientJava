@@ -18,9 +18,10 @@ public class NewsRepositoryImpl implements NewsRepository
     }
 
     @Override
-    public Resource<APIResponse> getNewsHeadlines()
+    public Resource<APIResponse> getNewsHeadlines(final String country,
+                                                  final int page)
     {
-        return responseToResource(remoteDataSource.getTopHeadlines());
+        return responseToResource(remoteDataSource.getTopHeadlines(country, page));
     }
 
     @Override
