@@ -50,6 +50,8 @@ public class NewsRepositoryImpl implements NewsRepository
 
     private Resource<APIResponse> responseToResource(final Response<APIResponse> response)
     {
+        if (response == null) { return Resource.error("Null response", null); }
+
         if (response.isSuccessful())
         {
             final APIResponse body = response.body();

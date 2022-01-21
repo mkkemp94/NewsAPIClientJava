@@ -3,11 +3,17 @@ package com.mkemp.newsapiclientjava;
 import android.os.Bundle;
 
 import com.mkemp.newsapiclientjava.databinding.ActivityMainBinding;
+import com.mkemp.newsapiclientjava.presentation.viewmodel.NewsViewModel;
+import com.mkemp.newsapiclientjava.presentation.viewmodel.NewsViewModelFactory;
+
+import javax.inject.Inject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Project Use Cases:
@@ -17,8 +23,13 @@ import androidx.navigation.ui.NavigationUI;
  * - Delete saved news
  * - Search
  */
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity
 {
+    @Inject
+    public NewsViewModelFactory factory;
+
+    public NewsViewModel viewModel;
     private ActivityMainBinding binding;
 
     @Override
@@ -32,5 +43,7 @@ public class MainActivity extends AppCompatActivity
         final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         final NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(binding.bnvNews, navController);
+
+        viewModel = new ViewModelProvider(this, factory).get(NewsViewModel.class);
     }
 }

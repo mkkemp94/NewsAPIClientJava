@@ -1,62 +1,37 @@
 package com.mkemp.newsapiclientjava;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.mkemp.newsapiclientjava.data.model.APIResponse;
+import com.mkemp.newsapiclientjava.databinding.FragmentNewsBinding;
+import com.mkemp.newsapiclientjava.presentation.adapter.NewsAdapter;
+import com.mkemp.newsapiclientjava.presentation.viewmodel.NewsViewModel;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link NewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class NewsFragment extends Fragment
 {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private NewsViewModel newsViewModel;
+    private NewsAdapter newsAdapter;
+    private FragmentNewsBinding fragmentNewsBinding;
+    private String country = "us";
+    private int page = 1;
 
     public NewsFragment()
     {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NewsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NewsFragment newInstance(String param1, String param2)
-    {
-        NewsFragment fragment = new NewsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null)
-        {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -65,5 +40,68 @@ public class NewsFragment extends Fragment
     {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_news, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+        fragmentNewsBinding = FragmentNewsBinding.bind(view);
+        newsViewModel = ((MainActivity) getActivity()).viewModel;
+        initRecyclerView();
+        viewNewsList();
+    }
+
+    private void viewNewsList()
+    {
+        newsViewModel.getNewsHeadLines(country, page);
+        newsViewModel.newsHeadLines.observe(getViewLifecycleOwner(), response ->
+        {
+            switch (response.status)
+            {
+                case SUCCESS:
+                {
+                    hideProgressBar();
+
+                    final APIResponse data = response.data;
+                    if (data != null)
+                    {
+                        newsAdapter.differ.submitList(data.getArticles());
+                    }
+                }
+                case ERROR:
+                {
+                    hideProgressBar();
+
+                    final String message = response.getMessage();
+                    if (message != null)
+                    {
+                        Log.e("Error", message);
+                        Toast.makeText(getActivity(), "An error occurred: " + message, Toast.LENGTH_LONG).show();
+                    }
+                }
+                case LOADING:
+                {
+                    showProgressBar();
+                }
+            }
+        });
+    }
+
+    private void initRecyclerView()
+    {
+        newsAdapter = new NewsAdapter();
+        fragmentNewsBinding.rvNews.setAdapter(newsAdapter);
+        fragmentNewsBinding.rvNews.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private void showProgressBar()
+    {
+        fragmentNewsBinding.progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar()
+    {
+        fragmentNewsBinding.progressBar.setVisibility(View.INVISIBLE);
     }
 }

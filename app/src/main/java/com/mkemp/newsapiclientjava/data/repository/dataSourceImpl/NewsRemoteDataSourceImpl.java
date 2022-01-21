@@ -5,6 +5,8 @@ import com.mkemp.newsapiclientjava.data.api.NewsAPIService;
 import com.mkemp.newsapiclientjava.data.model.APIResponse;
 import com.mkemp.newsapiclientjava.data.repository.dataSource.NewsRemoteDataSource;
 
+import java.io.IOException;
+
 import retrofit2.Response;
 
 public class NewsRemoteDataSourceImpl implements NewsRemoteDataSource
@@ -20,6 +22,14 @@ public class NewsRemoteDataSourceImpl implements NewsRemoteDataSource
     public Response<APIResponse> getTopHeadlines(final String country,
                                                  final int page)
     {
-        return newsAPIService.getTopHeadlines(country, page, BuildConfig.API_KEY);
+        try
+        {
+            return newsAPIService.getTopHeadlines(country, page, BuildConfig.API_KEY).execute();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

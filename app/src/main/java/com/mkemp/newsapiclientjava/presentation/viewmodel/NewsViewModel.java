@@ -21,7 +21,8 @@ public class NewsViewModel extends AndroidViewModel
     private final GetNewsHeadlinesUseCase getNewsHeadlinesUseCase;
 
     private final ExecutorService executor = Executors.newFixedThreadPool(4);
-    private final MutableLiveData<Resource<APIResponse>> newsHeadLines = new MutableLiveData<>();
+
+    public final MutableLiveData<Resource<APIResponse>> newsHeadLines = new MutableLiveData<>();
 
     public NewsViewModel(final Application application,
                          final GetNewsHeadlinesUseCase getNewsHeadlinesUseCase)
