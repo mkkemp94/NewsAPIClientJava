@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Toast;
 
 import com.mkemp.newsapiclientjava.data.model.APIResponse;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,11 +25,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  */
 public class NewsFragment extends Fragment
 {
-    private NewsViewModel newsViewModel;
+    private NewsViewModel viewModel;
     private NewsAdapter newsAdapter;
     private FragmentNewsBinding fragmentNewsBinding;
     private String country = "us";
     private int page = 1;
+    private boolean isScrolling = false;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    private int pages = 0;
 
     public NewsFragment()
     {
@@ -47,7 +53,7 @@ public class NewsFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
         fragmentNewsBinding = FragmentNewsBinding.bind(view);
-        newsViewModel = ((MainActivity) getActivity()).viewModel;
+        viewModel = ((MainActivity) getActivity()).viewModel;
         newsAdapter = ((MainActivity) getActivity()).newsAdapter;
         initRecyclerView();
         viewNewsList();
@@ -55,8 +61,8 @@ public class NewsFragment extends Fragment
 
     private void viewNewsList()
     {
-        newsViewModel.getNewsHeadLines(country, page);
-        newsViewModel.newsHeadLines.observe(getViewLifecycleOwner(), response ->
+        viewModel.getNewsHeadLines(country, page);
+        viewModel.newsHeadLines.observe(getViewLifecycleOwner(), response ->
         {
             switch (response.status)
             {
@@ -68,6 +74,15 @@ public class NewsFragment extends Fragment
                     if (data != null)
                     {
                         newsAdapter.differ.submitList(data.getArticles());
+                        if (data.getTotalResults() / 20 == 0)
+                        {
+                            pages = data.getTotalResults() / 20;
+                        }
+                        else
+                        {
+                            pages = data.getTotalResults() / 20 + 1;
+                        }
+                        isLastPage = page == pages;
                     }
                 }
                 case ERROR:
@@ -93,15 +108,50 @@ public class NewsFragment extends Fragment
     {
         fragmentNewsBinding.rvNews.setAdapter(newsAdapter);
         fragmentNewsBinding.rvNews.setLayoutManager(new LinearLayoutManager(getActivity()));
+        fragmentNewsBinding.rvNews.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrollStateChanged(@NonNull final RecyclerView recyclerView, final int newState)
+            {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                {
+                    isScrolling = true;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull final RecyclerView recyclerView, final int dx, final int dy)
+            {
+                super.onScrolled(recyclerView, dx, dy);
+                final LinearLayoutManager layoutManager = (LinearLayoutManager) fragmentNewsBinding.rvNews.getLayoutManager();
+                final int sizeOfCurrentList = layoutManager.getItemCount();
+                final int visibleItems = layoutManager.getChildCount();
+                final int topPosition = layoutManager.findFirstVisibleItemPosition();
+                final boolean hasReachedEnd = topPosition + visibleItems >= sizeOfCurrentList;
+                final boolean shouldPaginate =
+//                        ! isLoading &&
+                                ! isLastPage && hasReachedEnd && isScrolling;
+
+                if (shouldPaginate)
+                {
+                    page++;
+                    viewModel.getNewsHeadLines(country, page);
+                    isScrolling = false;
+                }
+            }
+        });
     }
 
     private void showProgressBar()
     {
+        isLoading = true;
         fragmentNewsBinding.progressBar.setVisibility(View.VISIBLE);
     }
 
     private void hideProgressBar()
     {
+        isLoading = false;
         fragmentNewsBinding.progressBar.setVisibility(View.INVISIBLE);
     }
 }

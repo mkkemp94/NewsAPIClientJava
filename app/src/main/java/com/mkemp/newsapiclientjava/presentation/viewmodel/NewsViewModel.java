@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.mkemp.newsapiclientjava.data.model.APIResponse;
 import com.mkemp.newsapiclientjava.data.util.Resource;
