@@ -3,6 +3,7 @@ package com.mkemp.newsapiclientjava;
 import android.os.Bundle;
 
 import com.mkemp.newsapiclientjava.databinding.ActivityMainBinding;
+import com.mkemp.newsapiclientjava.presentation.adapter.NewsAdapter;
 import com.mkemp.newsapiclientjava.presentation.viewmodel.NewsViewModel;
 import com.mkemp.newsapiclientjava.presentation.viewmodel.NewsViewModelFactory;
 
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity
 {
     @Inject
     public NewsViewModelFactory factory;
+
+    @Inject
+    public NewsAdapter newsAdapter;
 
     public NewsViewModel viewModel;
     private ActivityMainBinding binding;

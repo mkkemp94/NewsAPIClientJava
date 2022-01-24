@@ -48,6 +48,7 @@ public class NewsFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         fragmentNewsBinding = FragmentNewsBinding.bind(view);
         newsViewModel = ((MainActivity) getActivity()).viewModel;
+        newsAdapter = ((MainActivity) getActivity()).newsAdapter;
         initRecyclerView();
         viewNewsList();
     }
@@ -90,7 +91,6 @@ public class NewsFragment extends Fragment
 
     private void initRecyclerView()
     {
-        newsAdapter = new NewsAdapter();
         fragmentNewsBinding.rvNews.setAdapter(newsAdapter);
         fragmentNewsBinding.rvNews.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
