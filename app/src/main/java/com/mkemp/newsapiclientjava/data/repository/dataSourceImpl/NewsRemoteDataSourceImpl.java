@@ -32,4 +32,18 @@ public class NewsRemoteDataSourceImpl implements NewsRemoteDataSource
             return null;
         }
     }
+
+    @Override
+    public Response<APIResponse> getSearchedNews(final String country, final String searchQuery, final int page)
+    {
+        try
+        {
+            return newsAPIService.getSearchedTopHeadlines(country, searchQuery, page, BuildConfig.API_KEY).execute();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

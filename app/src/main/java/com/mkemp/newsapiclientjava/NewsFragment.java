@@ -1,11 +1,13 @@
 package com.mkemp.newsapiclientjava;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.mkemp.newsapiclientjava.data.model.APIResponse;
@@ -70,12 +72,92 @@ public class NewsFragment extends Fragment
 
         initRecyclerView();
         viewNewsList();
+        setSearchView();
     }
 
     private void viewNewsList()
     {
         viewModel.getNewsHeadLines(country, page);
         viewModel.newsHeadLines.observe(getViewLifecycleOwner(), response ->
+        {
+            switch (response.status)
+            {
+                case SUCCESS:
+                {
+                    hideProgressBar();
+
+                    final APIResponse data = response.data;
+                    if (data != null)
+                    {
+                        newsAdapter.differ.submitList(data.getArticles());
+                        if (data.getTotalResults() / 20 == 0)
+                        {
+                            pages = data.getTotalResults() / 20;
+                        }
+                        else
+                        {
+                            pages = data.getTotalResults() / 20 + 1;
+                        }
+                        isLastPage = page == pages;
+                    }
+                }
+                case ERROR:
+                {
+                    hideProgressBar();
+
+                    final String message = response.getMessage();
+                    if (message != null)
+                    {
+                        Log.e("Error", message);
+                        Toast.makeText(getActivity(), "An error occurred: " + message, Toast.LENGTH_LONG).show();
+                    }
+                }
+                case LOADING:
+                {
+                    showProgressBar();
+                }
+            }
+        });
+    }
+
+    // search
+
+    private void setSearchView()
+    {
+        final Handler handler = new Handler();
+        fragmentNewsBinding.svNews.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(final String query)
+            {
+                viewModel.searchNews("us", query, page);
+                viewSearchedNews();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String newText)
+            {
+                handler.postDelayed(() ->
+                {
+                    viewModel.searchNews("us", newText, page);
+                    viewSearchedNews();
+                }, 1000);
+                return false;
+            }
+        });
+
+        fragmentNewsBinding.svNews.setOnCloseListener(() ->
+        {
+            initRecyclerView();
+            viewNewsList();
+            return false;
+        });
+    }
+
+    private void viewSearchedNews()
+    {
+        viewModel.searchedNews.observe(getViewLifecycleOwner(), response ->
         {
             switch (response.status)
             {

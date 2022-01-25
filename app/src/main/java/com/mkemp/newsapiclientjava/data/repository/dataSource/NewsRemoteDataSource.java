@@ -7,4 +7,6 @@ import retrofit2.Response;
 public interface NewsRemoteDataSource
 {
     Response<APIResponse> getTopHeadlines(final String country, final int page);
+
+    Response<APIResponse> getSearchedNews(final String country, final String searchQuery, final int page);
 }

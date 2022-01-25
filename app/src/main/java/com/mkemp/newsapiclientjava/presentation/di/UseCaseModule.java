@@ -2,6 +2,7 @@ package com.mkemp.newsapiclientjava.presentation.di;
 
 import com.mkemp.newsapiclientjava.domain.repository.NewsRepository;
 import com.mkemp.newsapiclientjava.domain.usecase.GetNewsHeadlinesUseCase;
+import com.mkemp.newsapiclientjava.domain.usecase.GetSearchedNewsUseCase;
 
 import javax.inject.Singleton;
 
@@ -19,5 +20,12 @@ public class UseCaseModule
     public GetNewsHeadlinesUseCase provideNewsHeadlinesUseCase(NewsRepository newsRepository)
     {
         return new GetNewsHeadlinesUseCase(newsRepository);
+    }
+
+    @Singleton
+    @Provides
+    public GetSearchedNewsUseCase provideGetSearchedNewsUseCase(NewsRepository newsRepository)
+    {
+        return new GetSearchedNewsUseCase(newsRepository);
     }
 }

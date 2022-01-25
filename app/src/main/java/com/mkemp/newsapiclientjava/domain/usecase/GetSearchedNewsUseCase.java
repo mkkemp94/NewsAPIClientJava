@@ -13,9 +13,9 @@ public class GetSearchedNewsUseCase
         this.newsRepository = newsRepository;
     }
 
-    public Resource<APIResponse> execute(final String searchQuery)
+    public Resource<APIResponse> execute(final String country, final String searchQuery, final int page)
     {
         // Can modify this or perform other logic here
-        return newsRepository.getSearchedNews(searchQuery);
+        return newsRepository.getSearchedNews(country, searchQuery, page);
     }
 }

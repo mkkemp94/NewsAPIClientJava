@@ -25,9 +25,9 @@ public class NewsRepositoryImpl implements NewsRepository
     }
 
     @Override
-    public Resource<APIResponse> getSearchedNews(final String searchQuery)
+    public Resource<APIResponse> getSearchedNews(final String country, final String searchQuery, final int page)
     {
-        return null;
+        return responseToResource(remoteDataSource.getSearchedNews(country, searchQuery, page));
     }
 
     @Override

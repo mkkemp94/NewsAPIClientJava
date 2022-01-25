@@ -11,7 +11,7 @@ public interface NewsRepository
     Resource<APIResponse> getNewsHeadlines(final String country,
                                            final int page);
 
-    Resource<APIResponse> getSearchedNews(final String searchQuery);
+    Resource<APIResponse> getSearchedNews(final String country, final String searchQuery, final int page);
 
     void saveNews(final Article article);
 

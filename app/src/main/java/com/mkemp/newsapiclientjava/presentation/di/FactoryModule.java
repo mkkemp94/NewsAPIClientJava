@@ -3,6 +3,7 @@ package com.mkemp.newsapiclientjava.presentation.di;
 import android.app.Application;
 
 import com.mkemp.newsapiclientjava.domain.usecase.GetNewsHeadlinesUseCase;
+import com.mkemp.newsapiclientjava.domain.usecase.GetSearchedNewsUseCase;
 import com.mkemp.newsapiclientjava.presentation.viewmodel.NewsViewModelFactory;
 
 import javax.inject.Singleton;
@@ -19,8 +20,9 @@ public class FactoryModule
     @Singleton
     @Provides
     public NewsViewModelFactory provideNewsViewModelFactory(Application application,
-                                                            GetNewsHeadlinesUseCase getNewsHeadlinesUseCase)
+                                                            GetNewsHeadlinesUseCase getNewsHeadlinesUseCase,
+                                                            GetSearchedNewsUseCase getSearchedNewsUseCase)
     {
-        return new NewsViewModelFactory(application, getNewsHeadlinesUseCase);
+        return new NewsViewModelFactory(application, getNewsHeadlinesUseCase, getSearchedNewsUseCase);
     }
 }

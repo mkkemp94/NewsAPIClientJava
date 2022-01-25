@@ -12,4 +12,10 @@ public interface NewsAPIService
     Call<APIResponse> getTopHeadlines(@Query("country") final String country,
                                       @Query("page") final int page,
                                       @Query("apiKey") final String apiKey);
+
+    @GET("v2/top-headlines")
+    Call<APIResponse> getSearchedTopHeadlines(@Query("country") final String country,
+                                              @Query("q") final String searchQuery,
+                                              @Query("page") final int page,
+                                              @Query("apiKey") final String apiKey);
 }
