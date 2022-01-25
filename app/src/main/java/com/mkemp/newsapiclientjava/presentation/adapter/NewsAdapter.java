@@ -17,6 +17,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 {
     public final AsyncListDiffer<Article> differ;
 
+    private OnItemClickListener onItemClickListener;
+
     public NewsAdapter()
     {
         final DiffUtil.ItemCallback<Article> callback = new DiffUtil.ItemCallback<Article>()
@@ -62,7 +64,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return differ.getCurrentList().size();
     }
 
-    static class NewsViewHolder extends RecyclerView.ViewHolder
+    class NewsViewHolder extends RecyclerView.ViewHolder
     {
         @NonNull private final NewsListItemBinding binding;
 
@@ -82,6 +84,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             Glide.with(binding.ivArticleImage.getContext()).
                     load(article.getUrlToImage()).
                     into(binding.ivArticleImage);
+
+            binding.getRoot().setOnClickListener(v -> onItemClickListener.onClick(article));
         }
+    }
+
+    public interface OnItemClickListener
+    {
+        void onClick(Article article);
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener onItemClickListener)
+    {
+        this.onItemClickListener = onItemClickListener;
     }
 }

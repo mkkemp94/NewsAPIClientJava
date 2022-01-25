@@ -16,6 +16,8 @@ import com.mkemp.newsapiclientjava.presentation.viewmodel.NewsViewModel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,6 +57,17 @@ public class NewsFragment extends Fragment
         fragmentNewsBinding = FragmentNewsBinding.bind(view);
         viewModel = ((MainActivity) getActivity()).viewModel;
         newsAdapter = ((MainActivity) getActivity()).newsAdapter;
+
+        final NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        newsAdapter.setOnItemClickListener(article ->
+        {
+            final Bundle bundle = new Bundle();
+            bundle.putSerializable("selected_article", article);
+
+            final NavController navController = navHostFragment.getNavController();
+            navController.navigate(R.id.action_newsFragment_to_infoFragment, bundle);
+        });
+
         initRecyclerView();
         viewNewsList();
     }
