@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(binding.getRoot());
 
         // Hook up bottom navigation view
-        final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        final NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         final NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(binding.bnvNews, navController);
 

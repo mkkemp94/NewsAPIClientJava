@@ -60,7 +60,7 @@ public class NewsFragment extends Fragment
         viewModel = ((MainActivity) getActivity()).viewModel;
         newsAdapter = ((MainActivity) getActivity()).newsAdapter;
 
-        final NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        final NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment);
         newsAdapter.setOnItemClickListener(article ->
         {
             final Bundle bundle = new Bundle();
