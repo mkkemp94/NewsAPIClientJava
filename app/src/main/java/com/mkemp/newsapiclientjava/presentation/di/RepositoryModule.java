@@ -1,6 +1,7 @@
 package com.mkemp.newsapiclientjava.presentation.di;
 
 import com.mkemp.newsapiclientjava.data.repository.NewsRepositoryImpl;
+import com.mkemp.newsapiclientjava.data.repository.dataSource.NewsLocalDataSource;
 import com.mkemp.newsapiclientjava.data.repository.dataSource.NewsRemoteDataSource;
 import com.mkemp.newsapiclientjava.domain.repository.NewsRepository;
 
@@ -17,8 +18,9 @@ public class RepositoryModule
 {
     @Singleton
     @Provides
-    public NewsRepository provideNewsRepository(NewsRemoteDataSource remoteDataSource)
+    public NewsRepository provideNewsRepository(NewsRemoteDataSource remoteDataSource,
+                                                NewsLocalDataSource newsLocalDataSource)
     {
-        return new NewsRepositoryImpl(remoteDataSource);
+        return new NewsRepositoryImpl(remoteDataSource, newsLocalDataSource);
     }
 }

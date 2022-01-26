@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebViewClient;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.mkemp.newsapiclientjava.data.model.Article;
 import com.mkemp.newsapiclientjava.databinding.FragmentInfoBinding;
+import com.mkemp.newsapiclientjava.presentation.viewmodel.NewsViewModel;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +21,7 @@ import androidx.fragment.app.Fragment;
 public class InfoFragment extends Fragment
 {
     private FragmentInfoBinding fragmentInfoBinding;
+    private NewsViewModel newsViewModel;
 
     public InfoFragment()
     {
@@ -38,13 +41,23 @@ public class InfoFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
         fragmentInfoBinding = FragmentInfoBinding.bind(view);
+        newsViewModel = ((MainActivity) getActivity()).viewModel;
+
         final InfoFragmentArgs args = InfoFragmentArgs.fromBundle(getArguments());
         final Article article = args.getSelectedArticle();
-        fragmentInfoBinding.wvInfo.setWebViewClient(new WebViewClient());
-        if (! article.getUrl().isEmpty())
+
+        if (article != null && ! article.getUrl().isEmpty())
         {
+            fragmentInfoBinding.wvInfo.setWebViewClient(new WebViewClient());
             fragmentInfoBinding.wvInfo.loadUrl(article.getUrl());
+            fragmentInfoBinding.fabSave.setOnClickListener((v) ->
+            {
+                newsViewModel.saveArticle(article);
+                Snackbar.make(v, "Saved successfully!", Snackbar.LENGTH_LONG).show();
+            });
         }
+
+
 
     }
 }

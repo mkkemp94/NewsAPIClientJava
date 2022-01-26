@@ -6,9 +6,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.mkemp.newsapiclientjava.data.model.APIResponse;
+import com.mkemp.newsapiclientjava.data.model.Article;
 import com.mkemp.newsapiclientjava.data.util.Resource;
 import com.mkemp.newsapiclientjava.domain.usecase.GetNewsHeadlinesUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.GetSearchedNewsUseCase;
+import com.mkemp.newsapiclientjava.domain.usecase.SaveNewsUseCase;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,17 +23,20 @@ public class NewsViewModel extends AndroidViewModel
     private final Application application;
     private final GetNewsHeadlinesUseCase getNewsHeadlinesUseCase;
     private final GetSearchedNewsUseCase getSearchedNewsUseCase;
+    private final SaveNewsUseCase saveNewsUseCase;
 
     private final ExecutorService executor = Executors.newFixedThreadPool(4);
 
     public NewsViewModel(final Application application,
                          final GetNewsHeadlinesUseCase getNewsHeadlinesUseCase,
-                         final GetSearchedNewsUseCase getSearchedNewsUseCase)
+                         final GetSearchedNewsUseCase getSearchedNewsUseCase,
+                         final SaveNewsUseCase saveNewsUseCase)
     {
         super(application);
         this.application = application;
         this.getNewsHeadlinesUseCase = getNewsHeadlinesUseCase;
         this.getSearchedNewsUseCase = getSearchedNewsUseCase;
+        this.saveNewsUseCase = saveNewsUseCase;
     }
 
     // headlines
@@ -90,6 +95,16 @@ public class NewsViewModel extends AndroidViewModel
             {
                 searchedNews.postValue(Resource.error(e.getMessage(), null));
             }
+        });
+    }
+
+    // local data
+
+    public void saveArticle(Article article)
+    {
+        executor.execute(() ->
+        {
+            saveNewsUseCase.execute(article);
         });
     }
 

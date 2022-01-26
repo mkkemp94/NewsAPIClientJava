@@ -2,6 +2,7 @@ package com.mkemp.newsapiclientjava.data.repository;
 
 import com.mkemp.newsapiclientjava.data.model.APIResponse;
 import com.mkemp.newsapiclientjava.data.model.Article;
+import com.mkemp.newsapiclientjava.data.repository.dataSource.NewsLocalDataSource;
 import com.mkemp.newsapiclientjava.data.repository.dataSource.NewsRemoteDataSource;
 import com.mkemp.newsapiclientjava.data.util.Resource;
 import com.mkemp.newsapiclientjava.domain.repository.NewsRepository;
@@ -11,10 +12,13 @@ import retrofit2.Response;
 public class NewsRepositoryImpl implements NewsRepository
 {
     private final NewsRemoteDataSource remoteDataSource;
+    private final NewsLocalDataSource newsLocalDataSource;
 
-    public NewsRepositoryImpl(final NewsRemoteDataSource remoteDataSource)
+    public NewsRepositoryImpl(final NewsRemoteDataSource remoteDataSource,
+                              final NewsLocalDataSource newsLocalDataSource)
     {
         this.remoteDataSource = remoteDataSource;
+        this.newsLocalDataSource = newsLocalDataSource;
     }
 
     @Override
@@ -33,7 +37,7 @@ public class NewsRepositoryImpl implements NewsRepository
     @Override
     public void saveNews(final Article article)
     {
-
+        newsLocalDataSource.saveArticleToDB(article);
     }
 
     @Override

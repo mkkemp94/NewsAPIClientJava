@@ -1,42 +1,42 @@
 package com.mkemp.newsapiclientjava.data.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(
+        tableName = "articles"
+)
 public class Article implements Serializable
 {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @SerializedName("source")
-    @Expose
     private Source source;
 
     @SerializedName("author")
-    @Expose
     private String author;
 
     @SerializedName("title")
-    @Expose
     private String title;
 
     @SerializedName("description")
-    @Expose
     private String description;
 
     @SerializedName("url")
-    @Expose
     private String url;
 
     @SerializedName("urlToImage")
-    @Expose
     private String urlToImage;
 
     @SerializedName("publishedAt")
-    @Expose
     private String publishedAt;
 
     @SerializedName("content")
-    @Expose
     private String content;
 
     public Article(final Source source, final String author, final String title, final String description, final String url, final String urlToImage, final String publishedAt, final String content)
@@ -129,5 +129,15 @@ public class Article implements Serializable
     public void setContent(String content)
     {
         this.content = content;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 }
