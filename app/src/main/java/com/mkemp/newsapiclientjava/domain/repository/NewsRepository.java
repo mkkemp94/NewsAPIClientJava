@@ -17,10 +17,5 @@ public interface NewsRepository
 
     void deleteNews(final Article article);
 
-    interface SavedNewsHolder
-    {
-        void gotSavedNews(final List<Article> news);
-    }
-
-    void getSavedNews(final Article article, final SavedNewsHolder savedNewsHolder);
+    List<Article> getSavedNews();
 }

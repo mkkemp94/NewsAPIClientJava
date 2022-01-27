@@ -9,9 +9,11 @@ import com.mkemp.newsapiclientjava.data.model.APIResponse;
 import com.mkemp.newsapiclientjava.data.model.Article;
 import com.mkemp.newsapiclientjava.data.util.Resource;
 import com.mkemp.newsapiclientjava.domain.usecase.GetNewsHeadlinesUseCase;
+import com.mkemp.newsapiclientjava.domain.usecase.GetSavedNewsUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.GetSearchedNewsUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.SaveNewsUseCase;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,19 +26,22 @@ public class NewsViewModel extends AndroidViewModel
     private final GetNewsHeadlinesUseCase getNewsHeadlinesUseCase;
     private final GetSearchedNewsUseCase getSearchedNewsUseCase;
     private final SaveNewsUseCase saveNewsUseCase;
+    private final GetSavedNewsUseCase getSavedNewsUseCase;
 
     private final ExecutorService executor = Executors.newFixedThreadPool(4);
 
     public NewsViewModel(final Application application,
                          final GetNewsHeadlinesUseCase getNewsHeadlinesUseCase,
                          final GetSearchedNewsUseCase getSearchedNewsUseCase,
-                         final SaveNewsUseCase saveNewsUseCase)
+                         final SaveNewsUseCase saveNewsUseCase,
+                         final GetSavedNewsUseCase getSavedNewsUseCase)
     {
         super(application);
         this.application = application;
         this.getNewsHeadlinesUseCase = getNewsHeadlinesUseCase;
         this.getSearchedNewsUseCase = getSearchedNewsUseCase;
         this.saveNewsUseCase = saveNewsUseCase;
+        this.getSavedNewsUseCase = getSavedNewsUseCase;
     }
 
     // headlines
@@ -108,6 +113,18 @@ public class NewsViewModel extends AndroidViewModel
         });
     }
 
+    // get saved
+
+    public final MutableLiveData<List<Article>> savedNews = new MutableLiveData<>();
+
+    public void getSavedNews()
+    {
+        executor.execute(() ->
+        {
+            final List<Article> articles = getSavedNewsUseCase.execute();
+            savedNews.postValue(articles);
+        });
+    }
     // util
 
     private boolean isNetworkAvailable(final Context context)

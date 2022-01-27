@@ -4,6 +4,8 @@ import com.mkemp.newsapiclientjava.data.db.ArticleDAO;
 import com.mkemp.newsapiclientjava.data.model.Article;
 import com.mkemp.newsapiclientjava.data.repository.dataSource.NewsLocalDataSource;
 
+import java.util.List;
+
 public class NewsLocalDataSourceImpl implements NewsLocalDataSource
 {
     private final ArticleDAO articleDAO;
@@ -17,5 +19,11 @@ public class NewsLocalDataSourceImpl implements NewsLocalDataSource
     public void saveArticleToDB(final Article article)
     {
         articleDAO.insert(article);
+    }
+
+    @Override
+    public List<Article> getSavedArticles()
+    {
+        return articleDAO.getAllArticles();
     }
 }

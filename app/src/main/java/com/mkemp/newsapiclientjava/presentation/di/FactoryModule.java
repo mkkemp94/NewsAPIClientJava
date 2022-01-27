@@ -3,6 +3,7 @@ package com.mkemp.newsapiclientjava.presentation.di;
 import android.app.Application;
 
 import com.mkemp.newsapiclientjava.domain.usecase.GetNewsHeadlinesUseCase;
+import com.mkemp.newsapiclientjava.domain.usecase.GetSavedNewsUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.GetSearchedNewsUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.SaveNewsUseCase;
 import com.mkemp.newsapiclientjava.presentation.viewmodel.NewsViewModelFactory;
@@ -23,8 +24,9 @@ public class FactoryModule
     public NewsViewModelFactory provideNewsViewModelFactory(Application application,
                                                             GetNewsHeadlinesUseCase getNewsHeadlinesUseCase,
                                                             GetSearchedNewsUseCase getSearchedNewsUseCase,
-                                                            SaveNewsUseCase saveNewsUseCase)
+                                                            SaveNewsUseCase saveNewsUseCase,
+                                                            GetSavedNewsUseCase getSavedNewsUseCase)
     {
-        return new NewsViewModelFactory(application, getNewsHeadlinesUseCase, getSearchedNewsUseCase, saveNewsUseCase);
+        return new NewsViewModelFactory(application, getNewsHeadlinesUseCase, getSearchedNewsUseCase, saveNewsUseCase, getSavedNewsUseCase);
     }
 }

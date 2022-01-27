@@ -2,7 +2,8 @@ package com.mkemp.newsapiclientjava.domain.usecase;
 
 import com.mkemp.newsapiclientjava.data.model.Article;
 import com.mkemp.newsapiclientjava.domain.repository.NewsRepository;
-import com.mkemp.newsapiclientjava.domain.repository.NewsRepository.SavedNewsHolder;
+
+import java.util.List;
 
 public class GetSavedNewsUseCase
 {
@@ -13,8 +14,8 @@ public class GetSavedNewsUseCase
         this.newsRepository = newsRepository;
     }
 
-    public void execute(final Article article, final SavedNewsHolder savedNewsHolder)
+    public List<Article> execute()
     {
-        newsRepository.getSavedNews(article, savedNewsHolder);
+        return newsRepository.getSavedNews();
     }
 }

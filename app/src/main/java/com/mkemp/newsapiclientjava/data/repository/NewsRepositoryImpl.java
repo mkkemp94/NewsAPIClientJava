@@ -7,6 +7,8 @@ import com.mkemp.newsapiclientjava.data.repository.dataSource.NewsRemoteDataSour
 import com.mkemp.newsapiclientjava.data.util.Resource;
 import com.mkemp.newsapiclientjava.domain.repository.NewsRepository;
 
+import java.util.List;
+
 import retrofit2.Response;
 
 public class NewsRepositoryImpl implements NewsRepository
@@ -47,9 +49,9 @@ public class NewsRepositoryImpl implements NewsRepository
     }
 
     @Override
-    public void getSavedNews(final Article article, final SavedNewsHolder savedNewsHolder)
+    public List<Article> getSavedNews()
     {
-
+        return newsLocalDataSource.getSavedArticles();
     }
 
     private Resource<APIResponse> responseToResource(final Response<APIResponse> response)
