@@ -1,6 +1,7 @@
 package com.mkemp.newsapiclientjava.presentation.di;
 
 import com.mkemp.newsapiclientjava.domain.repository.NewsRepository;
+import com.mkemp.newsapiclientjava.domain.usecase.DeleteSavedNewsUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.GetNewsHeadlinesUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.GetSavedNewsUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.GetSearchedNewsUseCase;
@@ -43,5 +44,12 @@ public class UseCaseModule
     public GetSavedNewsUseCase provideGetSavedNewsUseCase(NewsRepository newsRepository)
     {
         return new GetSavedNewsUseCase(newsRepository);
+    }
+
+    @Singleton
+    @Provides
+    public DeleteSavedNewsUseCase provideDeleteSavedNewsUseCase(NewsRepository newsRepository)
+    {
+        return new DeleteSavedNewsUseCase(newsRepository);
     }
 }

@@ -9,4 +9,6 @@ public interface NewsLocalDataSource
     void saveArticleToDB(Article article);
 
     List<Article> getSavedArticles();
+
+    void deleteArticleFromDB(Article article);
 }

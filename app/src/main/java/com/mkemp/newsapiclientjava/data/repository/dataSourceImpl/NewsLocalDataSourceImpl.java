@@ -26,4 +26,10 @@ public class NewsLocalDataSourceImpl implements NewsLocalDataSource
     {
         return articleDAO.getAllArticles();
     }
+
+    @Override
+    public void deleteArticleFromDB(final Article article)
+    {
+        articleDAO.deleteArticle(article);
+    }
 }

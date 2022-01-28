@@ -45,7 +45,7 @@ public class NewsRepositoryImpl implements NewsRepository
     @Override
     public void deleteNews(final Article article)
     {
-
+        newsLocalDataSource.deleteArticleFromDB(article);
     }
 
     @Override

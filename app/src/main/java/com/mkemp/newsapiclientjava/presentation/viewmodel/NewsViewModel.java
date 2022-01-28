@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import com.mkemp.newsapiclientjava.data.model.APIResponse;
 import com.mkemp.newsapiclientjava.data.model.Article;
 import com.mkemp.newsapiclientjava.data.util.Resource;
+import com.mkemp.newsapiclientjava.domain.usecase.DeleteSavedNewsUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.GetNewsHeadlinesUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.GetSavedNewsUseCase;
 import com.mkemp.newsapiclientjava.domain.usecase.GetSearchedNewsUseCase;
@@ -27,6 +28,7 @@ public class NewsViewModel extends AndroidViewModel
     private final GetSearchedNewsUseCase getSearchedNewsUseCase;
     private final SaveNewsUseCase saveNewsUseCase;
     private final GetSavedNewsUseCase getSavedNewsUseCase;
+    private final DeleteSavedNewsUseCase deleteSavedNewsUseCase;
 
     private final ExecutorService executor = Executors.newFixedThreadPool(4);
 
@@ -34,7 +36,8 @@ public class NewsViewModel extends AndroidViewModel
                          final GetNewsHeadlinesUseCase getNewsHeadlinesUseCase,
                          final GetSearchedNewsUseCase getSearchedNewsUseCase,
                          final SaveNewsUseCase saveNewsUseCase,
-                         final GetSavedNewsUseCase getSavedNewsUseCase)
+                         final GetSavedNewsUseCase getSavedNewsUseCase,
+                         final DeleteSavedNewsUseCase deleteSavedNewsUseCase)
     {
         super(application);
         this.application = application;
@@ -42,6 +45,7 @@ public class NewsViewModel extends AndroidViewModel
         this.getSearchedNewsUseCase = getSearchedNewsUseCase;
         this.saveNewsUseCase = saveNewsUseCase;
         this.getSavedNewsUseCase = getSavedNewsUseCase;
+        this.deleteSavedNewsUseCase = deleteSavedNewsUseCase;
     }
 
     // headlines
@@ -125,6 +129,17 @@ public class NewsViewModel extends AndroidViewModel
             savedNews.postValue(articles);
         });
     }
+
+    // delete
+
+    public void deleteArticle(final Article article)
+    {
+        executor.execute(() ->
+        {
+            deleteSavedNewsUseCase.execute(article);
+        });
+    }
+
     // util
 
     private boolean isNetworkAvailable(final Context context)
